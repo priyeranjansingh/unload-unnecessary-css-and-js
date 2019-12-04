@@ -1,0 +1,30 @@
+func/*
+* add this function in your theme function.php file or in your child theme function.php
+* this will stop woocommerce css and js file to load on non woocommerce page if woocommerce is active
+*/
+add_action( 'wp_enqueue_scripts', 'stop_woocommerce_loading_css_js' );
+ 
+function stop_woocommerce_loading_css_js() {
+ 
+	// Check if WooCommerce plugin is active
+	if( function_exists( 'is_woocommerce' ) ){
+ 
+		// Check cuurent page is WooCommerce page or not 
+		if(! is_woocommerce() && ! is_cart() && ! is_checkout() ) { 		
+			
+			## Dequeue WooCommerce styles
+			wp_dequeue_style('woocommerce-layout'); 
+			wp_dequeue_style('woocommerce-general'); 
+			wp_dequeue_style('woocommerce-smallscreen'); 	
+ 
+			## Dequeue WooCommerce scripts
+			wp_dequeue_script('wc-cart-fragments');
+			wp_dequeue_script('woocommerce'); 
+			wp_dequeue_script('wc-add-to-cart'); 
+		
+			wp_deregister_script( 'js-cookie' );
+			wp_dequeue_script( 'js-cookie' );
+ 
+		}
+	}	
+}
